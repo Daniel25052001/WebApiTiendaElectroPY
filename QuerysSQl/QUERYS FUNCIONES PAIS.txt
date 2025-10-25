@@ -1,0 +1,64 @@
+
+CREATE OR REPLACE FUNCTION spaIngresarPais(
+    p_nombre VARCHAR
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO "Pais"("IdPais", "Nombre", "Activo")
+    VALUES (gen_random_uuid(), p_nombre, B'1');
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaModificarPais(
+    p_idpais UUID,
+    p_nombre VARCHAR,
+    p_activo BIT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE "Pais"
+    SET "Nombre" = p_nombre,
+        "Activo" = p_activo
+    WHERE "IdPais" = p_idpais;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaEliminarPais(
+    p_idpais UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM "Pais"
+    WHERE "IdPais" = p_idpais;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION spaConsultarPais()
+RETURNS TABLE(
+    "IdPais" UUID,
+    "Nombre" VARCHAR,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p."IdPais", p."Nombre", p."Activo"
+    FROM "Pais" p;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarPaisPorId(
+    p_idpais UUID
+)
+RETURNS TABLE(
+    "IdPais" UUID,
+    "Nombre" VARCHAR,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p."IdPais", p."Nombre", p."Activo"
+    FROM "Pais" p
+    WHERE p."IdPais" = p_idpais;
+END;
+$$ LANGUAGE plpgsql;

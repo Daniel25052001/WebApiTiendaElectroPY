@@ -1,0 +1,68 @@
+
+CREATE OR REPLACE FUNCTION spaIngresarDepartamento(
+    p_nombre VARCHAR,
+    p_idpais UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO "Departamento"("IdDepartamento", "Nombre", "IdPais", "Activo")
+    VALUES (gen_random_uuid(), p_nombre, p_idpais, B'1');
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaModificarDepartamento(
+    p_iddepartamento UUID,
+    p_nombre VARCHAR,
+    p_idpais UUID,
+    p_activo BIT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE "Departamento"
+    SET "Nombre" = p_nombre,
+        "IdPais" = p_idpais,
+        "Activo" = p_activo
+    WHERE "IdDepartamento" = p_iddepartamento;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaEliminarDepartamento(
+    p_iddepartamento UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM "Departamento"
+    WHERE "IdDepartamento" = p_iddepartamento;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarDepartamento()
+RETURNS TABLE(
+    "IdDepartamento" UUID,
+    "Nombre" VARCHAR,
+    "IdPais" UUID,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT d."IdDepartamento", d."Nombre", d."IdPais", d."Activo"
+    FROM "Departamento" d;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarDepartamentoPorId(
+    p_iddepartamento UUID
+)
+RETURNS TABLE(
+    "IdDepartamento" UUID,
+    "Nombre" VARCHAR,
+    "IdPais" UUID,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT d."IdDepartamento", d."Nombre", d."IdPais", d."Activo"
+    FROM "Departamento" d
+    WHERE d."IdDepartamento" = p_iddepartamento;
+END;
+$$ LANGUAGE plpgsql;

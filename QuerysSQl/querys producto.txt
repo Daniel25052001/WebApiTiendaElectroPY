@@ -1,0 +1,78 @@
+
+CREATE OR REPLACE FUNCTION spaIngresarProducto(
+    p_nombre VARCHAR,
+    p_descripcion TEXT,
+    p_precio NUMERIC,
+    p_stock INTEGER
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO "Producto"("IdProducto", "Nombre", "Descripcion", "Precio", "Stock", "Activo")
+    VALUES (gen_random_uuid(), p_nombre, p_descripcion, p_precio, p_stock, B'1');
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaModificarProducto(
+    p_idproducto UUID,
+    p_nombre VARCHAR,
+    p_descripcion TEXT,
+    p_precio NUMERIC,
+    p_stock INTEGER,
+    p_activo BIT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE "Producto"
+    SET "Nombre" = p_nombre,
+        "Descripcion" = p_descripcion,
+        "Precio" = p_precio,
+        "Stock" = p_stock,
+        "Activo" = p_activo
+    WHERE "IdProducto" = p_idproducto;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaEliminarProducto(
+    p_idproducto UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM "Producto"
+    WHERE "IdProducto" = p_idproducto;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarProducto()
+RETURNS TABLE(
+    "IdProducto" UUID,
+    "Nombre" VARCHAR,
+    "Descripcion" TEXT,
+    "Precio" NUMERIC,
+    "Stock" INTEGER,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p."IdProducto", p."Nombre", p."Descripcion", p."Precio", p."Stock", p."Activo"
+    FROM "Producto" p;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarProductoPorId(
+    p_idproducto UUID
+)
+RETURNS TABLE(
+    "IdProducto" UUID,
+    "Nombre" VARCHAR,
+    "Descripcion" TEXT,
+    "Precio" NUMERIC,
+    "Stock" INTEGER,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p."IdProducto", p."Nombre", p."Descripcion", p."Precio", p."Stock", p."Activo"
+    FROM "Producto" p
+    WHERE p."IdProducto" = p_idproducto;
+END;
+$$ LANGUAGE plpgsql;

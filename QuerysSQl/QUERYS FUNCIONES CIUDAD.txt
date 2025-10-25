@@ -1,0 +1,68 @@
+
+CREATE OR REPLACE FUNCTION spaIngresarCiudad(
+    p_nombre VARCHAR,
+    p_iddepartamento UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO "Ciudad"("IdCiudad", "Nombre", "IdDepartamento", "Activo")
+    VALUES (gen_random_uuid(), p_nombre, p_iddepartamento, B'1');
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaModificarCiudad(
+    p_idciudad UUID,
+    p_nombre VARCHAR,
+    p_iddepartamento UUID,
+    p_activo BIT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE "Ciudad"
+    SET "Nombre" = p_nombre,
+        "IdDepartamento" = p_iddepartamento,
+        "Activo" = p_activo
+    WHERE "IdCiudad" = p_idciudad;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaEliminarCiudad(
+    p_idciudad UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM "Ciudad"
+    WHERE "IdCiudad" = p_idciudad;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarCiudad()
+RETURNS TABLE(
+    "IdCiudad" UUID,
+    "Nombre" VARCHAR,
+    "IdDepartamento" UUID,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT c."IdCiudad", c."Nombre", c."IdDepartamento", c."Activo"
+    FROM "Ciudad" c;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarCiudadPorId(
+    p_idciudad UUID
+)
+RETURNS TABLE(
+    "IdCiudad" UUID,
+    "Nombre" VARCHAR,
+    "IdDepartamento" UUID,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT c."IdCiudad", c."Nombre", c."IdDepartamento", c."Activo"
+    FROM "Ciudad" c
+    WHERE c."IdCiudad" = p_idciudad;
+END;
+$$ LANGUAGE plpgsql;

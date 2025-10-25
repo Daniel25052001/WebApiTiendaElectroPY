@@ -1,0 +1,78 @@
+
+CREATE OR REPLACE FUNCTION spaIngresarSede(
+    p_nombre VARCHAR,
+    p_direccion VARCHAR,
+    p_telefono VARCHAR,
+    p_idciudad UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO "Sede"("IdSede", "Nombre", "Direccion", "Telefono", "IdCiudad", "Activo")
+    VALUES (gen_random_uuid(), p_nombre, p_direccion, p_telefono, p_idciudad, B'1');
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaModificarSede(
+    p_idsede UUID,
+    p_nombre VARCHAR,
+    p_direccion VARCHAR,
+    p_telefono VARCHAR,
+    p_idciudad UUID,
+    p_activo BIT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE "Sede"
+    SET "Nombre" = p_nombre,
+        "Direccion" = p_direccion,
+        "Telefono" = p_telefono,
+        "IdCiudad" = p_idciudad,
+        "Activo" = p_activo
+    WHERE "IdSede" = p_idsede;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaEliminarSede(
+    p_idsede UUID
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM "Sede"
+    WHERE "IdSede" = p_idsede;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarSede()
+RETURNS TABLE(
+    "IdSede" UUID,
+    "Nombre" VARCHAR,
+    "Direccion" VARCHAR,
+    "Telefono" VARCHAR,
+    "IdCiudad" UUID,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT s."IdSede", s."Nombre", s."Direccion", s."Telefono", s."IdCiudad", s."Activo"
+    FROM "Sede" s;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION spaConsultarSedePorId(
+    p_idsede UUID
+)
+RETURNS TABLE(
+    "IdSede" UUID,
+    "Nombre" VARCHAR,
+    "Direccion" VARCHAR,
+    "Telefono" VARCHAR,
+    "IdCiudad" UUID,
+    "Activo" BIT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT s."IdSede", s."Nombre", s."Direccion", s."Telefono", s."IdCiudad", s."Activo"
+    FROM "Sede" s
+    WHERE s."IdSede" = p_idsede;
+END;
+$$ LANGUAGE plpgsql;

@@ -1,0 +1,44 @@
+CREATE TABLE "Pais" (
+    "IdPais" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "Nombre" VARCHAR(100) NOT NULL,
+    "Activo" BIT NOT NULL DEFAULT B'1'
+);
+
+
+CREATE TABLE "Departamento" (
+    "IdDepartamento" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "Nombre" VARCHAR(100) NOT NULL,
+    "IdPais" UUID NOT NULL,
+    "Activo" BIT NOT NULL DEFAULT B'1',
+    FOREIGN KEY ("IdPais") REFERENCES "Pais"("IdPais")
+);
+
+
+CREATE TABLE "Ciudad" (
+    "IdCiudad" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "Nombre" VARCHAR(100) NOT NULL,
+    "IdDepartamento" UUID NOT NULL,
+    "Activo" BIT NOT NULL DEFAULT B'1',
+    FOREIGN KEY ("IdDepartamento") REFERENCES "Departamento"("IdDepartamento")
+);
+
+
+CREATE TABLE "Sede" (
+    "IdSede" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "Nombre" VARCHAR(100) NOT NULL,
+    "Direccion" VARCHAR(150),
+    "Telefono" VARCHAR(20),
+    "IdCiudad" UUID NOT NULL,
+    "Activo" BIT NOT NULL DEFAULT B'1',
+    FOREIGN KEY ("IdCiudad") REFERENCES "Ciudad"("IdCiudad")
+);
+
+
+CREATE TABLE "Producto" (
+    "IdProducto" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "Nombre" VARCHAR(100) NOT NULL,
+    "Descripcion" TEXT,
+    "Precio" NUMERIC(12,2) NOT NULL,
+    "Stock" INTEGER NOT NULL,
+    "Activo" BIT NOT NULL DEFAULT B'1'
+);
