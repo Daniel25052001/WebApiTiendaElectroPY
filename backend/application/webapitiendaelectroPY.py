@@ -14,12 +14,71 @@ from infraestructure.geografia.ciudad.ciudadinfrastructure import CiudadInfrastr
 from infraestructure.organizacion.sede.sedeinfrastructure import SedeInfrastructure
 from infraestructure.producto.producto.productoinfrastructure import ProductoInfrastructure
 
+
+##############################################
+
+
+
 app: FastAPI = FastAPI(
 
     title="Tienda Electro",
     description="API REST de una tienda de electrodomésticos",
 
 )
+
+
+
+
+
+
+
+
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = ["http://localhost:3000"]  # Aquí pones la URL donde corre tu React
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ###########################################
 
