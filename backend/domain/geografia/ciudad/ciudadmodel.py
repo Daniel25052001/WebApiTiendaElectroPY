@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, Field
+
 
 class CiudadModel(BaseModel):
-    idciudad: str
+    idciudad: Optional[str] = None
     nombre: str
     iddepartamento: str
-    activo: bool
+    activo: bool = Field(default=True)
