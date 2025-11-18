@@ -6,7 +6,7 @@ const AgregarProducto = () => {
   const [descripcion, setDescripcion] = useState("");
   const [precio, setPrecio] = useState("");
   const [stock, setStock] = useState("");
-  const [activo, setActivo] = useState(true);
+  const [activo, setActivo] = useState(false);//se modifico el true para que no aparezca como activo por defecto
   const [mensaje, setMensaje] = useState("");
 
   const handleSubmit = async (e) => {
